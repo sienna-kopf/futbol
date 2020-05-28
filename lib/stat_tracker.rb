@@ -14,66 +14,67 @@ class StatTracker
   end
 
   def game_collection
-    GameCollection.new
+    GameCollection.new(@games)
   end
 
   def team_collection
-    TeamCollection.new
+    TeamCollection.new(@teams)
   end
 
   def game_team_collection
-    GameTeamCollection.new
+    GameTeamCollection.new(@game_teams)
   end
 
   def highest_total_score
-    top_score = 0
-    CSV.foreach(@games, headers: true, header_converters: :symbol) do |game|
-      if game[:away_goals].to_i + game[:home_goals].to_i > top_score
-        top_score = game[:away_goals].to_i + game[:home_goals].to_i
-      end
+    total = game_collection.all.max_by do |game|
+      game.away_goals + game.home_goals
     end
-    top_score
+    total.home_goals + total.away_goals
   end
 
   def lowest_total_score
-    lowest_score = 1_000_000_000
-    CSV.foreach(@games, headers: true, header_converters: :symbol) do |game|
-      if game[:away_goals].to_i + game[:home_goals].to_i < lowest_score
-        lowest_score = game[:away_goals].to_i + game[:home_goals].to_i
-      end
+    total = game_collection.all.min_by do |game|
+      game.away_goals + game.home_goals
     end
-    lowest_score
+    total.home_goals + total.away_goals
   end
 
 
 ##################### Beginning of League section #####################
 
-  def count_of_teams
-
+  def count_of_teams(team)
+    @teams += team
+    #this is for adding team(s) though?
   end
 
   def best_offense
+    #Name of the team with the highest average number of goals scored per game across all seasons.
 
   end
 
   def worst_offense
+    #Name of the team with the lowest average number of goals scored per game across all seasons.
 
   end
 
   def highest_scoring_visitor
+    #Name of the team with the highest average score per game across all seasons when they are away.
 
   end
 
   def highest_scoring_home_team
+    #Name of the team with the highest average score per game across all seasons when they are home.
 
   end
 
   def lowest_scoring_visitor
+    #Name of the team with the lowest average score per game across all seasons when they are a visitor.
 
   end
 
   def lowest_scoring_home_team
+    #Name of the team with the lowest average score per game across all seasons when they are at home.
 
   end
 
-end 
+end
