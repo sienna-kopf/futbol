@@ -1,6 +1,5 @@
 require 'csv'
 class League
-
   attr_reader :season,
               :away_team_id,
               :home_team_id,
@@ -14,21 +13,5 @@ class League
     @away_goals = league_data[:away_goals]
     @home_goals = league_data[:home_goals]
   end
-
-end
-
-
-
-
-
-
-
-
-
-  end
-
-
-
-
 
 end
