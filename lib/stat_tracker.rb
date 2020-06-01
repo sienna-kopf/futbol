@@ -43,27 +43,26 @@ class StatTracker
 ##################### Beginning of League section #####################
 
   def count_of_teams(team)
-    @teams += team
-    #this is for adding team(s) though?
+    teams.count
   end
 
   def best_offense
-    #Name of the team with the highest average number of goals scored per game across all seasons.
+    team_id =
 
   end
 
   def worst_offense
-    #Name of the team with the lowest average number of goals scored per game across all seasons.
+    team_id =
 
   end
 
   def highest_scoring_visitor
-    #Name of the team with the highest average score per game across all seasons when they are away.
+    team_id =
 
   end
 
   def highest_scoring_home_team
-    #Name of the team with the highest average score per game across all seasons when they are home.
+    team_id = 
 
   end
 
