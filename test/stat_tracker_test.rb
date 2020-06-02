@@ -48,192 +48,192 @@ class StatTrackerTest < Minitest::Test
   end
 
   # JUDITH START HERE
-  def test_it_can_get_highest_total_score
-    assert_equal 8, @stat_tracker.highest_total_score
-  end
-
-  def test_it_can_get_lowest_total_score
-    assert_equal 1, @stat_tracker.lowest_total_score
-  end
-
-  def test_it_can_get_percentage_of_home_wins
-    assert_equal 0.44, @stat_tracker.percentage_home_wins
-  end
-
-  def test_it_can_get_percentage_of_visitor_wins
-    assert_equal 0.44, @stat_tracker.percentage_visitor_wins
-  end
-
-  def test_it_can_get_percentage_of_ties
-    assert_equal 0.11, @stat_tracker.percentage_ties
-  end
-
-  def test_count_of_games_by_season
-    expected = {
-      "20132014"=>6,
-      "20142015"=>4,
-      "20162017"=>3,
-      "20122013"=>4
-    }
-    assert_equal expected, @stat_tracker.count_of_games_by_season
-  end
-
-  def test_average_goals_per_game
-    assert_equal 7.33, @stat_tracker.average_goals_per_game
-  end
-
-  def test_sum_of_goals_per_season
-    assert_equal 12, @stat_tracker.sum_of_goals_per_season("20122013")
-  end
-
-  def test_average_goals_per_season
-    assert_equal 3.0, @stat_tracker.average_goals_per_season("20122013")
-  end
-
-  def test_average_goals_by_season
-    expected = {
-              "20132014"=>4.0,
-              "20142015"=>4.75,
-              "20162017"=>3.67,
-              "20122013"=>3.0
-                }
-    assert_equal expected, @stat_tracker.average_goals_by_season
-  end
-  # JUDITH END HERE
-
-  # The below is Dan's code
-
-  def test_it_can_get_team_info
-    expected = {
-                "team_id" => "30",
-                "franchise_id" => "37",
-                "team_name" => "Orlando City SC",
-                "abbreviation" => "ORL",
-                "link" => "/api/v1/teams/30"
-                }
-    assert_equal expected, @stat_tracker.team_info("30")
-  end
-
-  def test_it_can_filter_home_games_by_team
-    assert_equal 5, @stat_tracker.home_games_filtered_by_team("19").count
-  end
-
-  def test_it_can_filter_away_games_by_team
-    assert_equal 7, @stat_tracker.away_games_filtered_by_team("19").count
-  end
-
-  def test_it_can_group_home_games_by_season
-    assert_equal true, @stat_tracker.home_games_grouped_by_season("19").keys.include?("20142015")
-    assert_equal true,
-    @stat_tracker.home_games_grouped_by_season("19").keys.include?("20162017")
-    assert_equal false, @stat_tracker.home_games_grouped_by_season("19").keys.include?(:tie)
-  end
-
-  def test_it_can_group_away_games_by_season
-    assert_equal true, @stat_tracker.away_games_grouped_by_season("19").keys.include?("20142015")
-    assert_equal true,
-    @stat_tracker.away_games_grouped_by_season("19").keys.include?("20122013")
-    assert_equal false, @stat_tracker.away_games_grouped_by_season("19").keys.include?(:home_win)
-  end
-
-  def test_it_can_get_number_of_home_wins_in_season
-    assert_equal true, @stat_tracker.season_home_wins("19").values.include?(2.0)
-  end
-
-  def test_it_can_get_number_of_away_wins_in_season
-    assert_equal true, @stat_tracker.season_away_wins("19").values.include?(1.0)
-  end
-
-  def test_it_can_get_total_wins_in_a_season
-    assert_equal true, @stat_tracker.win_count_by_season("19").values.include?(-1.0)
-  end
-
-  def test_it_can_get_best_season
-    assert_equal "20162017", @stat_tracker.best_season("19")
-  end
-
-  def test_it_can_get_number_of_home_losses_in_season
-    assert_equal true, @stat_tracker.season_home_losses("19").values.include?(-1.0)
-  end
-
-  def test_it_can_get_number_of_away_losses_in_season
-    assert_equal true, @stat_tracker.season_away_losses("19").values.include?(-1.0)
-  end
-
-  def test_it_can_get_total_losses_in_a_season
-    assert_equal true, @stat_tracker.loss_count_by_season("19").values.include?(1.0)
-  end
-
-  def test_it_can_get_worst_season
-    assert_equal "20122013", @stat_tracker.worst_season("19")
-  end
-
-  def test_it_can_get_all_games_played_by_a_team
-    assert_equal 12, @stat_tracker.combine_all_games_played("19").count
-  end
-
-  def test_it_can_total_wins_or_ties_for_a_team
-    assert_equal 0.5, @stat_tracker.find_total_wins_or_ties("19")
-  end
-
-  def test_it_can_get_average_win_percentage
-    assert_equal Float, @stat_tracker.average_win_percentage("19").class
-  end
-
-  def test_it_can_get_most_home_goals_scored
-    assert_equal 3, @stat_tracker.most_home_goals_scored("19")
-  end
-
-  def test_it_can_get_most_away_goals_scored
-    assert_equal 4, @stat_tracker.most_away_goals_scored("19")
-  end
-
-  def test_it_can_get_most_goals_scored
-    assert_equal 4, @stat_tracker.most_goals_scored("19")
-    assert_equal 3, @stat_tracker.most_goals_scored("30")
-    assert_equal 4, @stat_tracker.most_goals_scored("26")
-  end
-
-  def test_it_can_get_fewest_home_goals_scored
-    assert_equal 3, @stat_tracker.most_home_goals_scored("19")
-  end
-
-  def test_it_can_get_fewest_away_goals_scored
-    assert_equal 4, @stat_tracker.most_away_goals_scored("19")
-  end
-
-  def test_it_can_get_fewest_goals_scored
-    assert_equal 0, @stat_tracker.fewest_goals_scored("19")
-    assert_equal 0, @stat_tracker.fewest_goals_scored("30")
-  end
-
-  def test_it_can_get_all_games_played_by_team
-    assert_equal Array, @stat_tracker.all_games_played_by_team("19").class
-  end
-
-  def test_it_can_get_team_opponents
-    assert_equal Hash, @stat_tracker.opponents("19").class
-  end
-
-  def test_it_can_get_opponent_win_percentages
-    assert_equal Hash, @stat_tracker.opponent_win_percentages("19").class
-  end
-
-  def test_it_can_get_most_won_against_opponent
-    assert_equal "30", @stat_tracker.most_won_against_opponent("19")
-  end
-
-  def test_it_can_get_favorite_opponent
-    assert_equal "Orlando City SC", @stat_tracker.favorite_opponent("19")
-  end
-
-  def test_it_can_get_most_lost_against_opponent
-    assert_equal "23", @stat_tracker.most_lost_against_opponent("19")
-  end
-
-  def test_it_can_get_rival
-    assert_equal "Montreal Impact", @stat_tracker.rival("19")
-  end
+  # def test_it_can_get_highest_total_score
+  #   assert_equal 8, @stat_tracker.highest_total_score
+  # end
+  #
+  # def test_it_can_get_lowest_total_score
+  #   assert_equal 1, @stat_tracker.lowest_total_score
+  # end
+  #
+  # def test_it_can_get_percentage_of_home_wins
+  #   assert_equal 0.44, @stat_tracker.percentage_home_wins
+  # end
+  #
+  # def test_it_can_get_percentage_of_visitor_wins
+  #   assert_equal 0.44, @stat_tracker.percentage_visitor_wins
+  # end
+  #
+  # def test_it_can_get_percentage_of_ties
+  #   assert_equal 0.11, @stat_tracker.percentage_ties
+  # end
+  #
+  # def test_count_of_games_by_season
+  #   expected = {
+  #     "20132014"=>6,
+  #     "20142015"=>4,
+  #     "20162017"=>3,
+  #     "20122013"=>4
+  #   }
+  #   assert_equal expected, @stat_tracker.count_of_games_by_season
+  # end
+  #
+  # def test_average_goals_per_game
+  #   assert_equal 7.33, @stat_tracker.average_goals_per_game
+  # end
+  #
+  # def test_sum_of_goals_per_season
+  #   assert_equal 12, @stat_tracker.sum_of_goals_per_season("20122013")
+  # end
+  #
+  # def test_average_goals_per_season
+  #   assert_equal 3.0, @stat_tracker.average_goals_per_season("20122013")
+  # end
+  #
+  # def test_average_goals_by_season
+  #   expected = {
+  #             "20132014"=>4.0,
+  #             "20142015"=>4.75,
+  #             "20162017"=>3.67,
+  #             "20122013"=>3.0
+  #               }
+  #   assert_equal expected, @stat_tracker.average_goals_by_season
+  # end
+  # # JUDITH END HERE
+  #
+  # # The below is Dan's code
+  #
+  # def test_it_can_get_team_info
+  #   expected = {
+  #               "team_id" => "30",
+  #               "franchise_id" => "37",
+  #               "team_name" => "Orlando City SC",
+  #               "abbreviation" => "ORL",
+  #               "link" => "/api/v1/teams/30"
+  #               }
+  #   assert_equal expected, @stat_tracker.team_info("30")
+  # end
+  #
+  # def test_it_can_filter_home_games_by_team
+  #   assert_equal 5, @stat_tracker.home_games_filtered_by_team("19").count
+  # end
+  #
+  # def test_it_can_filter_away_games_by_team
+  #   assert_equal 7, @stat_tracker.away_games_filtered_by_team("19").count
+  # end
+  #
+  # def test_it_can_group_home_games_by_season
+  #   assert_equal true, @stat_tracker.home_games_grouped_by_season("19").keys.include?("20142015")
+  #   assert_equal true,
+  #   @stat_tracker.home_games_grouped_by_season("19").keys.include?("20162017")
+  #   assert_equal false, @stat_tracker.home_games_grouped_by_season("19").keys.include?(:tie)
+  # end
+  #
+  # def test_it_can_group_away_games_by_season
+  #   assert_equal true, @stat_tracker.away_games_grouped_by_season("19").keys.include?("20142015")
+  #   assert_equal true,
+  #   @stat_tracker.away_games_grouped_by_season("19").keys.include?("20122013")
+  #   assert_equal false, @stat_tracker.away_games_grouped_by_season("19").keys.include?(:home_win)
+  # end
+  #
+  # def test_it_can_get_number_of_home_wins_in_season
+  #   assert_equal true, @stat_tracker.season_home_wins("19").values.include?(2.0)
+  # end
+  #
+  # def test_it_can_get_number_of_away_wins_in_season
+  #   assert_equal true, @stat_tracker.season_away_wins("19").values.include?(1.0)
+  # end
+  #
+  # def test_it_can_get_total_wins_in_a_season
+  #   assert_equal true, @stat_tracker.win_count_by_season("19").values.include?(-1.0)
+  # end
+  #
+  # def test_it_can_get_best_season
+  #   assert_equal "20162017", @stat_tracker.best_season("19")
+  # end
+  #
+  # def test_it_can_get_number_of_home_losses_in_season
+  #   assert_equal true, @stat_tracker.season_home_losses("19").values.include?(-1.0)
+  # end
+  #
+  # def test_it_can_get_number_of_away_losses_in_season
+  #   assert_equal true, @stat_tracker.season_away_losses("19").values.include?(-1.0)
+  # end
+  #
+  # def test_it_can_get_total_losses_in_a_season
+  #   assert_equal true, @stat_tracker.loss_count_by_season("19").values.include?(1.0)
+  # end
+  #
+  # def test_it_can_get_worst_season
+  #   assert_equal "20122013", @stat_tracker.worst_season("19")
+  # end
+  #
+  # def test_it_can_get_all_games_played_by_a_team
+  #   assert_equal 12, @stat_tracker.combine_all_games_played("19").count
+  # end
+  #
+  # def test_it_can_total_wins_or_ties_for_a_team
+  #   assert_equal 0.5, @stat_tracker.find_total_wins_or_ties("19")
+  # end
+  #
+  # def test_it_can_get_average_win_percentage
+  #   assert_equal Float, @stat_tracker.average_win_percentage("19").class
+  # end
+  #
+  # def test_it_can_get_most_home_goals_scored
+  #   assert_equal 3, @stat_tracker.most_home_goals_scored("19")
+  # end
+  #
+  # def test_it_can_get_most_away_goals_scored
+  #   assert_equal 4, @stat_tracker.most_away_goals_scored("19")
+  # end
+  #
+  # def test_it_can_get_most_goals_scored
+  #   assert_equal 4, @stat_tracker.most_goals_scored("19")
+  #   assert_equal 3, @stat_tracker.most_goals_scored("30")
+  #   assert_equal 4, @stat_tracker.most_goals_scored("26")
+  # end
+  #
+  # def test_it_can_get_fewest_home_goals_scored
+  #   assert_equal 3, @stat_tracker.most_home_goals_scored("19")
+  # end
+  #
+  # def test_it_can_get_fewest_away_goals_scored
+  #   assert_equal 4, @stat_tracker.most_away_goals_scored("19")
+  # end
+  #
+  # def test_it_can_get_fewest_goals_scored
+  #   assert_equal 0, @stat_tracker.fewest_goals_scored("19")
+  #   assert_equal 0, @stat_tracker.fewest_goals_scored("30")
+  # end
+  #
+  # def test_it_can_get_all_games_played_by_team
+  #   assert_equal Array, @stat_tracker.all_games_played_by_team("19").class
+  # end
+  #
+  # def test_it_can_get_team_opponents
+  #   assert_equal Hash, @stat_tracker.opponents("19").class
+  # end
+  #
+  # def test_it_can_get_opponent_win_percentages
+  #   assert_equal Hash, @stat_tracker.opponent_win_percentages("19").class
+  # end
+  #
+  # def test_it_can_get_most_won_against_opponent
+  #   assert_equal "30", @stat_tracker.most_won_against_opponent("19")
+  # end
+  #
+  # def test_it_can_get_favorite_opponent
+  #   assert_equal "Orlando City SC", @stat_tracker.favorite_opponent("19")
+  # end
+  #
+  # def test_it_can_get_most_lost_against_opponent
+  #   assert_equal "23", @stat_tracker.most_lost_against_opponent("19")
+  # end
+  #
+  # def test_it_can_get_rival
+  #   assert_equal "Montreal Impact", @stat_tracker.rival("19")
+  # end
 
 # The above is Dan's code
 #################### START SEASON STATISTIC TESTS #########################
@@ -339,51 +339,51 @@ class StatTrackerTest < Minitest::Test
   end
   ########################## END SEASON STATISTICS #############################
   # start of sienna's league stats
-  def test_it_can_find_all_home_game_teams
-    assert_equal 9, @stat_tracker.home_game_teams.count
-    assert_equal GameTeam, @stat_tracker.home_game_teams[0].class
-    assert_equal "home", @stat_tracker.home_game_teams[0].hoa
-  end
-
-  def test_it_can_group_home_game_teams_by_team_id
-    assert_equal ["30", "19", "24", "26", "14"], @stat_tracker.home_game_teams_by_team.keys
-    assert_equal 4, @stat_tracker.home_game_teams_by_team["30"].count
-    assert_equal GameTeam, @stat_tracker.home_game_teams_by_team["30"][0].class
-    assert_equal "home", @stat_tracker.home_game_teams_by_team["30"][0].hoa
-  end
-
-  def test_it_can_determine_total_home_games_grouped_by_team
-    assert_equal ["30","19", "24", "26", "14"], @stat_tracker.total_home_goals_grouped_by_team.keys
-    assert_equal [6, 4, 2, 1, 3], @stat_tracker.total_home_goals_grouped_by_team.values
-    assert_equal 4, @stat_tracker.total_home_goals_grouped_by_team["19"]
-  end
-
-  def test_it_can_determine_total_home_goals_grouped_by_team
-    assert_equal ["30","19", "24", "26", "14"], @stat_tracker.total_home_games_grouped_by_team.keys
-    assert_equal [4, 2, 1, 1, 1], @stat_tracker.total_home_games_grouped_by_team.values
-    assert_equal 2, @stat_tracker.total_home_games_grouped_by_team["19"]
-  end
-
-  def test_it_can_determine_ratio_of_home_goals_to_games_grouped_by_team
-    assert_equal ["30","19", "24", "26", "14"], @stat_tracker.ratio_home_goals_to_games_grouped_by_team.keys
-    assert_equal [1.5, 2.0, 2.0, 1.0, 3.0], @stat_tracker.ratio_home_goals_to_games_grouped_by_team.values
-    assert_equal 2.0, @stat_tracker.ratio_home_goals_to_games_grouped_by_team["19"]
-  end
-
-  def test_it_can_find_team_id_with_best_home_goals_to_games_ratio
-    assert_equal "14", @stat_tracker.find_team_id_with_best_home_goals_to_games_ratio
-  end
-
-  def test_it_can_find_team_with_worst_home_goals_to_games_ratio
-    assert_equal "26", @stat_tracker.find_team_id_with_worst_home_goals_to_games_ratio
-  end
-
-  def test_highest_scoring_home_team
-    assert_equal "DC United", @stat_tracker.highest_scoring_home_team
-  end
-
-  def test_lowest_scoring_home_team
-    assert_equal "FC Cincinnati", @stat_tracker.lowest_scoring_home_team
-  end
-  #end of sienna's league stats
+  # def test_it_can_find_all_home_game_teams
+  #   assert_equal 9, @stat_tracker.home_game_teams.count
+  #   assert_equal GameTeam, @stat_tracker.home_game_teams[0].class
+  #   assert_equal "home", @stat_tracker.home_game_teams[0].hoa
+  # end
+  #
+  # def test_it_can_group_home_game_teams_by_team_id
+  #   assert_equal ["30", "19", "24", "26", "14"], @stat_tracker.home_game_teams_by_team.keys
+  #   assert_equal 4, @stat_tracker.home_game_teams_by_team["30"].count
+  #   assert_equal GameTeam, @stat_tracker.home_game_teams_by_team["30"][0].class
+  #   assert_equal "home", @stat_tracker.home_game_teams_by_team["30"][0].hoa
+  # end
+  #
+  # def test_it_can_determine_total_home_games_grouped_by_team
+  #   assert_equal ["30","19", "24", "26", "14"], @stat_tracker.total_home_goals_grouped_by_team.keys
+  #   assert_equal [6, 4, 2, 1, 3], @stat_tracker.total_home_goals_grouped_by_team.values
+  #   assert_equal 4, @stat_tracker.total_home_goals_grouped_by_team["19"]
+  # end
+  #
+  # def test_it_can_determine_total_home_goals_grouped_by_team
+  #   assert_equal ["30","19", "24", "26", "14"], @stat_tracker.total_home_games_grouped_by_team.keys
+  #   assert_equal [4, 2, 1, 1, 1], @stat_tracker.total_home_games_grouped_by_team.values
+  #   assert_equal 2, @stat_tracker.total_home_games_grouped_by_team["19"]
+  # end
+  #
+  # def test_it_can_determine_ratio_of_home_goals_to_games_grouped_by_team
+  #   assert_equal ["30","19", "24", "26", "14"], @stat_tracker.ratio_home_goals_to_games_grouped_by_team.keys
+  #   assert_equal [1.5, 2.0, 2.0, 1.0, 3.0], @stat_tracker.ratio_home_goals_to_games_grouped_by_team.values
+  #   assert_equal 2.0, @stat_tracker.ratio_home_goals_to_games_grouped_by_team["19"]
+  # end
+  #
+  # def test_it_can_find_team_id_with_best_home_goals_to_games_ratio
+  #   assert_equal "14", @stat_tracker.find_team_id_with_best_home_goals_to_games_ratio
+  # end
+  #
+  # def test_it_can_find_team_with_worst_home_goals_to_games_ratio
+  #   assert_equal "26", @stat_tracker.find_team_id_with_worst_home_goals_to_games_ratio
+  # end
+  #
+  # def test_highest_scoring_home_team
+  #   assert_equal "DC United", @stat_tracker.highest_scoring_home_team
+  # end
+  #
+  # def test_lowest_scoring_home_team
+  #   assert_equal "FC Cincinnati", @stat_tracker.lowest_scoring_home_team
+  # end
+  # #end of sienna's league stats
 end

@@ -57,164 +57,163 @@ class StatTracker
   end
 
 # JUDITH START HERE
-  def highest_total_score
-    total = game_collection_to_use.max_by do |game|
-      game.away_goals.to_i + game.home_goals.to_i
-    end
-    total.away_goals.to_i + total.home_goals.to_i
-  end
-
-  def lowest_total_score
-    total = game_collection_to_use.min_by do |game|
-      game.away_goals.to_i + game.home_goals.to_i
-    end
-    total.away_goals.to_i + total.home_goals.to_i
-  end
-
-  def home_games
-    home_games = []
-    game_team_collection.all.flat_map do |game_team|
-      result = game_team.hoa == "home"
-        home_games << result
-      end
-    home_games.count(true)
-  end
-
-  def percentage_home_wins
-    home_wins = []
-    game_team_collection.all.flat_map do |game_team|
-      result = game_team.hoa == "home" && game_team.result == "WIN"
-        home_wins << result
-    end
-    (home_wins.count(true) / home_games.to_f).round(2)
-  end
-
-  def visitor_games
-    visitor_games = []
-    game_team_collection.all.flat_map do |game_team|
-      result = game_team.hoa == "away"
-      visitor_games << result
-    end
-    visitor_games.count(true)
-  end
-
-  def percentage_visitor_wins
-    visitor_wins = []
-    game_team_collection.all.flat_map do |game_team|
-      result = game_team.hoa == "away" && game_team.result == "WIN"
-        visitor_wins << result
-    end
-    (visitor_wins.count(true) / visitor_games.to_f).round(2)
-  end
-
-  def all_games
-    all_games = []
-    game_team_collection.all.flat_map do |game_team|
-      result = game_team.hoa
-      all_games << result
-    end
-    all_games.count
-  end
-
-  def percentage_ties
-    ties = []
-    game_team_collection.all.flat_map do |game_team|
-      result =  game_team.result == "TIE"
-        ties << result
-    end
-    (ties.count(true) / all_games.to_f).round(2)
-  end
-
-  def seasons
-    seasons = []
-    game_collection.all.flat_map do |game|
-       seasons << game.season
-    end
-    seasons
-  end
-
-  def count_of_games_by_season
-    games_per_season = Hash.new(0)
-    seasons.each do |season|
-       games_per_season[season] += 1
-     end
-     games_per_season
-  end
-
-  def sum_of_all_goals
-    game_collection.all.sum do |game|
-      game.away_goals.to_i + game.home_goals.to_i
-    end
-  end
-
-  def average_goals_per_game
-    ((sum_of_all_goals / all_games.to_f) * 2).round(2)
-  end
-
-  def sum_of_goals_per_season(season)
-    individual_season = game_collection.all.find_all do |game|
-      game.season == season
-    end
-     individual_season.sum do |game|
-       game.home_goals.to_i + game.away_goals.to_i
-     end
-  end
-
-  #Begin league stats for Dan: highest/lowest_scoring_visitor
-
-  def all_teams_grouped_by_away_games
-    games = game_collection.all.group_by do |game|
-      game.away_team_id
-    end
-    acc = {}
-    games.each do |away_game_id, game|
-      game.each do |individual_game|
-        if acc[away_game_id].nil?
-          old_away_goals = 0
-        # elsif old_away_goals.nil?
-          # old_away_goals = individual_game.away_goals.to_f
-        else
-          old_away_goals = individual_game.away_goals.to_f + old_away_goals
-        end
-        old_away_goals = old_away_goals
-        acc[away_game_id] = old_away_goals
-      end
-    end
-    # acc.each do |teams_id, away_scores|
-    #   require "pry"; binding.pry
-    #   acc[teams_id] = away_scores/games[teams_id].count
-    acc
-    require "pry"; binding.pry
-  end
-
-  def highest_scoring_away_team_id
-    result = all_teams_grouped_by_away_games.max_by do |team_id, away_scores|
-      away_scores
-    end.first
-  end
-
-  def highest_scoring_visitor
-    # method: teams_and_their_away_games # look like this
-      #{first_team_id => {away_team_goals_in_first_particular_game => Game, away_team_goals_in_second_particular_game => Game}, second_team_id => {away_team}
-    # method: all_teams_with_away_scores #Look like this
-      #{first_team_id => total_away_goals / total_games_while_away, second_team_id => total_away ...}
-    team_collection.all.find do |team|
-      most_won_against_opponent(team_id) == team.team_id
-
-    end.team_name
-  end
-
-  def most_lost_against_opponent(team_id)
-    opponent_win_percentages(team_id).max_by do |opponent_id, win_rate|
-      win_rate
-    end.first
-  end
-
-  def rival(team_id)
-    acc = team_collection.all.find do |team|
-      most_lost_against_opponent(team_id) == team.team_id
-    end.team_name
-  end
+  # def highest_total_score
+  #   total = game_collection_to_use.max_by do |game|
+  #     game.away_goals.to_i + game.home_goals.to_i
+  #   end
+  #   total.away_goals.to_i + total.home_goals.to_i
+  # end
+  #
+  # def lowest_total_score
+  #   total = game_collection_to_use.min_by do |game|
+  #     game.away_goals.to_i + game.home_goals.to_i
+  #   end
+  #   total.away_goals.to_i + total.home_goals.to_i
+  # end
+  #
+  # def home_games
+  #   home_games = []
+  #   game_team_collection.all.flat_map do |game_team|
+  #     result = game_team.hoa == "home"
+  #       home_games << result
+  #     end
+  #   home_games.count(true)
+  # end
+  #
+  # def percentage_home_wins
+  #   home_wins = []
+  #   game_team_collection.all.flat_map do |game_team|
+  #     result = game_team.hoa == "home" && game_team.result == "WIN"
+  #       home_wins << result
+  #   end
+  #   (home_wins.count(true) / home_games.to_f).round(2)
+  # end
+  #
+  # def visitor_games
+  #   visitor_games = []
+  #   game_team_collection.all.flat_map do |game_team|
+  #     result = game_team.hoa == "away"
+  #     visitor_games << result
+  #   end
+  #   visitor_games.count(true)
+  # end
+  #
+  # def percentage_visitor_wins
+  #   visitor_wins = []
+  #   game_team_collection.all.flat_map do |game_team|
+  #     result = game_team.hoa == "away" && game_team.result == "WIN"
+  #       visitor_wins << result
+  #   end
+  #   (visitor_wins.count(true) / visitor_games.to_f).round(2)
+  # end
+  #
+  # def all_games
+  #   all_games = []
+  #   game_team_collection.all.flat_map do |game_team|
+  #     result = game_team.hoa
+  #     all_games << result
+  #   end
+  #   all_games.count
+  # end
+  #
+  # def percentage_ties
+  #   ties = []
+  #   game_team_collection.all.flat_map do |game_team|
+  #     result =  game_team.result == "TIE"
+  #       ties << result
+  #   end
+  #   (ties.count(true) / all_games.to_f).round(2)
+  # end
+  #
+  # def seasons
+  #   seasons = []
+  #   game_collection.all.flat_map do |game|
+  #      seasons << game.season
+  #   end
+  #   seasons
+  # end
+  #
+  # def count_of_games_by_season
+  #   games_per_season = Hash.new(0)
+  #   seasons.each do |season|
+  #      games_per_season[season] += 1
+  #    end
+  #    games_per_season
+  # end
+  #
+  # def sum_of_all_goals
+  #   game_collection.all.sum do |game|
+  #     game.away_goals.to_i + game.home_goals.to_i
+  #   end
+  # end
+  #
+  # def average_goals_per_game
+  #   ((sum_of_all_goals / all_games.to_f) * 2).round(2)
+  # end
+  #
+  # def sum_of_goals_per_season(season)
+  #   individual_season = game_collection.all.find_all do |game|
+  #     game.season == season
+  #   end
+  #    individual_season.sum do |game|
+  #      game.home_goals.to_i + game.away_goals.to_i
+  #    end
+  # end
+  #
+  # # #Begin league stats for Dan: highest/lowest_scoring_visitor
+  # #
+  # # def all_teams_grouped_by_away_games
+  # #   games = game_collection.all.group_by do |game|
+  # #     game.away_team_id
+  # #   end
+  # #   acc = {}
+  # #   games.each do |away_game_id, game|
+  # #     game.each do |individual_game|
+  # #       if acc[away_game_id].nil?
+  # #         old_away_goals = 0
+  # #       # elsif old_away_goals.nil?
+  # #         # old_away_goals = individual_game.away_goals.to_f
+  # #       else
+  # #         old_away_goals = individual_game.away_goals.to_f + old_away_goals
+  # #       end
+  # #       old_away_goals = old_away_goals
+  # #       acc[away_game_id] = old_away_goals
+  # #     end
+  # #   end
+  # #   # acc.each do |teams_id, away_scores|
+  # #   #   require "pry"; binding.pry
+  # #   #   acc[teams_id] = away_scores/games[teams_id].count
+  # #   acc
+  # # end
+  # #
+  # # def highest_scoring_away_team_id
+  # #   result = all_teams_grouped_by_away_games.max_by do |team_id, away_scores|
+  # #     away_scores
+  # #   end.first
+  # # end
+  # #
+  # # def highest_scoring_visitor
+  # #   # method: teams_and_their_away_games # look like this
+  # #     #{first_team_id => {away_team_goals_in_first_particular_game => Game, away_team_goals_in_second_particular_game => Game}, second_team_id => {away_team}
+  # #   # method: all_teams_with_away_scores #Look like this
+  # #     #{first_team_id => total_away_goals / total_games_while_away, second_team_id => total_away ...}
+  # #   team_collection.all.find do |team|
+  # #     most_won_against_opponent(team_id) == team.team_id
+  # #
+  # #   end.team_name
+  # # end
+  #
+  # def most_lost_against_opponent(team_id)
+  #   opponent_win_percentages(team_id).max_by do |opponent_id, win_rate|
+  #     win_rate
+  #   end.first
+  # end
+  #
+  # def rival(team_id)
+  #   acc = team_collection.all.find do |team|
+  #     most_lost_against_opponent(team_id) == team.team_id
+  #   end.team_name
+  # end
   # End of Dan's code #
 
      #################START of SEASON STATS######################
@@ -374,69 +373,69 @@ class StatTracker
 
   ######################END of SEASON STATS####################
   # start of sienna's league stats
-  def home_game_teams
-    game_team_collection.all.find_all do |game_team|
-      game_team.hoa == "home"
-    end
-  end
-
-  def home_game_teams_by_team
-    home_game_teams.group_by do |game_team|
-      game_team.team_id
-    end
-  end
-
-  def total_home_goals_grouped_by_team
-    goals_by_team_id = Hash.new(0)
-    home_game_teams_by_team.each do |team_id, game_team_coll|
-      game_team_coll.each do |game_team|
-        goals_by_team_id[team_id] += game_team.goals.to_i
-      end
-    end
-    goals_by_team_id
-  end
-
-  def total_home_games_grouped_by_team
-    games_by_team_id = Hash.new(0)
-    home_game_teams_by_team.each do |team_id, game_team_coll|
-      game_team_coll.each do |game_team|
-        games_by_team_id[team_id] += 1
-      end
-    end
-    games_by_team_id
-  end
-
-  def ratio_home_goals_to_games_grouped_by_team
-    ratio_goals_to_games_by_team = Hash.new(0)
-    total_home_games_grouped_by_team.each do |games_team_id, total_games|
-      total_home_goals_grouped_by_team.each do |goals_team_id, total_goals|
-        if games_team_id == goals_team_id
-          ratio_goals_to_games_by_team[games_team_id] = (total_goals.to_f / total_games.to_f)
-        end
-      end
-    end
-    ratio_goals_to_games_by_team
-  end
-
-  def find_team_id_with_best_home_goals_to_games_ratio
-    ratio_home_goals_to_games_grouped_by_team.max_by do |team_id, ratio_g_to_g|
-      ratio_g_to_g
-    end[0]
-  end
-
-  def find_team_id_with_worst_home_goals_to_games_ratio
-    ratio_home_goals_to_games_grouped_by_team.min_by do |team_id, ratio_g_to_g|
-      ratio_g_to_g
-    end[0]
-  end
-
-  def highest_scoring_home_team
-    team_name_based_off_of_team_id(find_team_id_with_best_home_goals_to_games_ratio)
-  end
-
-  def lowest_scoring_home_team
-    team_name_based_off_of_team_id(find_team_id_with_worst_home_goals_to_games_ratio)
-  end
+  # def home_game_teams
+  #   game_team_collection.all.find_all do |game_team|
+  #     game_team.hoa == "home"
+  #   end
+  # end
+  #
+  # def home_game_teams_by_team
+  #   home_game_teams.group_by do |game_team|
+  #     game_team.team_id
+  #   end
+  # end
+  #
+  # def total_home_goals_grouped_by_team
+  #   goals_by_team_id = Hash.new(0)
+  #   home_game_teams_by_team.each do |team_id, game_team_coll|
+  #     game_team_coll.each do |game_team|
+  #       goals_by_team_id[team_id] += game_team.goals.to_i
+  #     end
+  #   end
+  #   goals_by_team_id
+  # end
+  #
+  # def total_home_games_grouped_by_team
+  #   games_by_team_id = Hash.new(0)
+  #   home_game_teams_by_team.each do |team_id, game_team_coll|
+  #     game_team_coll.each do |game_team|
+  #       games_by_team_id[team_id] += 1
+  #     end
+  #   end
+  #   games_by_team_id
+  # end
+  #
+  # def ratio_home_goals_to_games_grouped_by_team
+  #   ratio_goals_to_games_by_team = Hash.new(0)
+  #   total_home_games_grouped_by_team.each do |games_team_id, total_games|
+  #     total_home_goals_grouped_by_team.each do |goals_team_id, total_goals|
+  #       if games_team_id == goals_team_id
+  #         ratio_goals_to_games_by_team[games_team_id] = (total_goals.to_f / total_games.to_f)
+  #       end
+  #     end
+  #   end
+  #   ratio_goals_to_games_by_team
+  # end
+  #
+  # def find_team_id_with_best_home_goals_to_games_ratio
+  #   ratio_home_goals_to_games_grouped_by_team.max_by do |team_id, ratio_g_to_g|
+  #     ratio_g_to_g
+  #   end[0]
+  # end
+  #
+  # def find_team_id_with_worst_home_goals_to_games_ratio
+  #   ratio_home_goals_to_games_grouped_by_team.min_by do |team_id, ratio_g_to_g|
+  #     ratio_g_to_g
+  #   end[0]
+  # end
+  #
+  # def highest_scoring_home_team
+  #   team_name_based_off_of_team_id(find_team_id_with_best_home_goals_to_games_ratio)
+  # end
+  #
+  # def lowest_scoring_home_team
+  #   team_name_based_off_of_team_id(find_team_id_with_worst_home_goals_to_games_ratio)
+  # end
 
   # end of sienna's league stats
 
