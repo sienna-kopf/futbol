@@ -47,13 +47,13 @@ class StatTrackerTest < Minitest::Test
     assert_instance_of GameTeamCollection, @stat_tracker.game_team_collection
   end
 
-  # JUDITH START HERE 
+  # JUDITH START HERE
   def test_it_can_get_highest_total_score
-    assert_equal 11, @stat_tracker.highest_total_score
+    assert_equal 8, @stat_tracker.highest_total_score
   end
 
   def test_it_can_get_lowest_total_score
-    assert_equal 0, @stat_tracker.lowest_total_score
+    assert_equal 1, @stat_tracker.lowest_total_score
   end
 
   def test_it_can_get_percentage_of_home_wins
@@ -61,45 +61,41 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_get_percentage_of_visitor_wins
-    assert_equal 0.36, @stat_tracker.percentage_visitor_wins
+    assert_equal 0.44, @stat_tracker.percentage_visitor_wins
   end
 
   def test_it_can_get_percentage_of_ties
-    assert_equal 0.20, @stat_tracker.percentage_ties
+    assert_equal 0.11, @stat_tracker.percentage_ties
   end
 
   def test_count_of_games_by_season
     expected = {
-                "20122013"=>806,
-                "20162017"=>1317,
-                "20142015"=>1319,
-                "20152016"=>1321,
-                "20132014"=>1323,
-                "20172018"=>1355
-                }
+      "20132014"=>6,
+      "20142015"=>4,
+      "20162017"=>3,
+      "20122013"=>4
+    }
     assert_equal expected, @stat_tracker.count_of_games_by_season
   end
 
   def test_average_goals_per_game
-    assert_equal 4.22, @stat_tracker.average_goals_per_game
+    assert_equal 7.33, @stat_tracker.average_goals_per_game
   end
 
   def test_sum_of_goals_per_season
-    assert_equal 3322, @stat_tracker.sum_of_goals_per_season("20122013")
+    assert_equal 12, @stat_tracker.sum_of_goals_per_season("20122013")
   end
 
   def test_average_goals_per_season
-    assert_equal 4.12, @stat_tracker.average_goals_per_season("20122013")
+    assert_equal 3.0, @stat_tracker.average_goals_per_season("20122013")
   end
 
   def test_average_goals_by_season
     expected = {
-                "20122013"=>4.12,
-                "20162017"=>4.23,
-                "20142015"=>4.14,
-                "20152016"=>4.16,
-                "20132014"=>4.19,
-                "20172018"=>4.44
+              "20132014"=>4.0,
+              "20142015"=>4.75,
+              "20162017"=>3.67,
+              "20122013"=>3.0
                 }
     assert_equal expected, @stat_tracker.average_goals_by_season
   end
@@ -243,16 +239,16 @@ class StatTrackerTest < Minitest::Test
 #################### START SEASON STATISTIC TESTS #########################
 
   def test_it_can_select_games_based_on_season
-    assert_equal 1, @stat_tracker.games_by_season("20162017").count
-    assert_equal 2, @stat_tracker.games_by_season("20122013").count
-    assert_equal 3, @stat_tracker.games_by_season("20132014").count
+    assert_equal 3, @stat_tracker.games_by_season("20162017").count
+    assert_equal 4, @stat_tracker.games_by_season("20122013").count
+    assert_equal 6, @stat_tracker.games_by_season("20132014").count
     assert_equal Array, @stat_tracker.games_by_season("20162017").class
     assert_equal Game, @stat_tracker.games_by_season("20162017").first.class
   end
 
   def test_it_can_group_season_games_by_team_id
-    assert_equal 1, @stat_tracker.season_games_grouped_by_team_id("20162017").count
-    assert_equal 3, @stat_tracker.season_games_grouped_by_team_id("20132014").count
+    assert_equal 3, @stat_tracker.season_games_grouped_by_team_id("20162017").count
+    assert_equal 6, @stat_tracker.season_games_grouped_by_team_id("20132014").count
     assert_equal Game, @stat_tracker.season_games_grouped_by_team_id("20122013").values[0][0].class
     assert_equal "2016030235", @stat_tracker.season_games_grouped_by_team_id("20162017").keys[0]
   end
@@ -262,7 +258,7 @@ class StatTrackerTest < Minitest::Test
     assert_equal 6, @stat_tracker.game_teams_by_season("20132014").count
     assert_equal GameTeam, @stat_tracker.game_teams_by_season("20162017")[0].class
   end
-  
+
   def test_it_can_determine_the_winningest_coach
     expected1 = ["Darryl Sutter", "Ralph Krueger"]
     assert_includes expected1, @stat_tracker.winningest_coach("20122013")
@@ -278,26 +274,26 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Peter Laviolette", @stat_tracker.worst_coach("20162017")
   end
 
-  def test_it_can_count_up_goals_for_teams_over_a_season
-    skip
-    assert_equal 4, @stat_tracker.total_season_goals_grouped_by_team("20122013")["22"]
-    assert_equal ["19", "26", "22", "30"], @stat_tracker.total_season_goals_grouped_by_team("20122013").keys
-    assert_equal [0,1,4,1], @stat_tracker.total_season_goals_grouped_by_team("20122013").values
-  end
-
-  def test_it_can_count_up_shots_for_teams_over_a_season
-    skip
-    assert_equal 9, @stat_tracker.total_season_shots_grouped_by_team("20122013")["30"]
-    assert_equal ["19", "26", "22", "30"], @stat_tracker.total_season_shots_grouped_by_team("20122013").keys
-    assert_equal [7,5,4,9], @stat_tracker.total_season_shots_grouped_by_team("20122013").values
-  end
-
-  def test_it_can_get_the_ratio_of_shots_to_goals_for_the_season
-    skip
-    assert_equal 0.2, @stat_tracker.season_ratio_goals_to_shots_grouped_by_team("20122013")["26"]
-    assert_equal 1.0, @stat_tracker.season_ratio_goals_to_shots_grouped_by_team("20122013")["22"]
-    assert_equal ["19", "26", "22", "30"], @stat_tracker.season_ratio_goals_to_shots_grouped_by_team("20122013").keys
-  end
+  # def test_it_can_count_up_goals_for_teams_over_a_season
+  #   skip
+  #   assert_equal 4, @stat_tracker.total_season_goals_grouped_by_team("20122013")["22"]
+  #   assert_equal ["19", "26", "22", "30"], @stat_tracker.total_season_goals_grouped_by_team("20122013").keys
+  #   assert_equal [0,1,4,1], @stat_tracker.total_season_goals_grouped_by_team("20122013").values
+  # end
+  #
+  # def test_it_can_count_up_shots_for_teams_over_a_season
+  #   skip
+  #   assert_equal 9, @stat_tracker.total_season_shots_grouped_by_team("20122013")["30"]
+  #   assert_equal ["19", "26", "22", "30"], @stat_tracker.total_season_shots_grouped_by_team("20122013").keys
+  #   assert_equal [7,5,4,9], @stat_tracker.total_season_shots_grouped_by_team("20122013").values
+  # end
+  #
+  # def test_it_can_get_the_ratio_of_shots_to_goals_for_the_season
+  #   skip
+  #   assert_equal 0.2, @stat_tracker.season_ratio_goals_to_shots_grouped_by_team("20122013")["26"]
+  #   assert_equal 1.0, @stat_tracker.season_ratio_goals_to_shots_grouped_by_team("20122013")["22"]
+  #   assert_equal ["19", "26", "22", "30"], @stat_tracker.season_ratio_goals_to_shots_grouped_by_team("20122013").keys
+  # end
 
   def test_it_can_determine_the_most_accurate_team
     assert_equal "Washington Spirit FC", @stat_tracker.most_accurate_team("20122013")
@@ -342,4 +338,52 @@ class StatTrackerTest < Minitest::Test
     assert_equal Array, @stat_tracker.game_team_collection_to_use.class
   end
   ########################## END SEASON STATISTICS #############################
-end 
+  # start of sienna's league stats
+  def test_it_can_find_all_home_game_teams
+    assert_equal 9, @stat_tracker.home_game_teams.count
+    assert_equal GameTeam, @stat_tracker.home_game_teams[0].class
+    assert_equal "home", @stat_tracker.home_game_teams[0].hoa
+  end
+
+  def test_it_can_group_home_game_teams_by_team_id
+    assert_equal ["30", "19", "24", "26", "14"], @stat_tracker.home_game_teams_by_team.keys
+    assert_equal 4, @stat_tracker.home_game_teams_by_team["30"].count
+    assert_equal GameTeam, @stat_tracker.home_game_teams_by_team["30"][0].class
+    assert_equal "home", @stat_tracker.home_game_teams_by_team["30"][0].hoa
+  end
+
+  def test_it_can_determine_total_home_games_grouped_by_team
+    assert_equal ["30","19", "24", "26", "14"], @stat_tracker.total_home_goals_grouped_by_team.keys
+    assert_equal [6, 4, 2, 1, 3], @stat_tracker.total_home_goals_grouped_by_team.values
+    assert_equal 4, @stat_tracker.total_home_goals_grouped_by_team["19"]
+  end
+
+  def test_it_can_determine_total_home_goals_grouped_by_team
+    assert_equal ["30","19", "24", "26", "14"], @stat_tracker.total_home_games_grouped_by_team.keys
+    assert_equal [4, 2, 1, 1, 1], @stat_tracker.total_home_games_grouped_by_team.values
+    assert_equal 2, @stat_tracker.total_home_games_grouped_by_team["19"]
+  end
+
+  def test_it_can_determine_ratio_of_home_goals_to_games_grouped_by_team
+    assert_equal ["30","19", "24", "26", "14"], @stat_tracker.ratio_home_goals_to_games_grouped_by_team.keys
+    assert_equal [1.5, 2.0, 2.0, 1.0, 3.0], @stat_tracker.ratio_home_goals_to_games_grouped_by_team.values
+    assert_equal 2.0, @stat_tracker.ratio_home_goals_to_games_grouped_by_team["19"]
+  end
+
+  def test_it_can_find_team_id_with_best_home_goals_to_games_ratio
+    assert_equal "14", @stat_tracker.find_team_id_with_best_home_goals_to_games_ratio
+  end
+
+  def test_it_can_find_team_with_worst_home_goals_to_games_ratio
+    assert_equal "26", @stat_tracker.find_team_id_with_worst_home_goals_to_games_ratio
+  end
+
+  def test_highest_scoring_home_team
+    assert_equal "DC United", @stat_tracker.highest_scoring_home_team
+  end
+
+  def test_lowest_scoring_home_team
+    assert_equal "FC Cincinnati", @stat_tracker.lowest_scoring_home_team
+  end
+  #end of sienna's league stats
+end

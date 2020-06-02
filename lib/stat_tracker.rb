@@ -33,7 +33,7 @@ class StatTracker
   end
 
   def game_collection_to_use
-    game_coll = instantiate_game_collection
+    instantiate_game_collection
   end
 
   def instantiate_game_collection
@@ -58,23 +58,19 @@ class StatTracker
 
 # JUDITH START HERE
   def highest_total_score
-    top_score = 0
-    game_collection.all.each do |game|
-      if game.away_goals.to_i + game.home_goals.to_i > top_score
-        top_score = game.away_goals.to_i + game.home_goals.to_i
-      end
+    total = game_collection_to_use.max_by do |game|
+      game.away_goals.to_i + game.home_goals.to_i
     end
+    total.away_goals.to_i + total.home_goals.to_i
   end
 
   def lowest_total_score
-    lowest_score = 1000000
-    game_collection.all.each do |game|
-      if game.away_goals.to_i + game.home_goals.to_i < lowest_score
-        lowest_score = game.away_goals.to_i + game.home_goals.to_i
-      end
+    total = game_collection_to_use.min_by do |game|
+      game.away_goals.to_i + game.home_goals.to_i
     end
-  end 
-    
+    total.away_goals.to_i + total.home_goals.to_i
+  end
+
   def home_games
     home_games = []
     game_team_collection.all.flat_map do |game_team|
@@ -128,7 +124,7 @@ class StatTracker
     end
     (ties.count(true) / all_games.to_f).round(2)
   end
-  
+
   def seasons
     seasons = []
     game_collection.all.flat_map do |game|
@@ -449,7 +445,7 @@ class StatTracker
   def favorite_opponent(team_id)
     team_collection.all.find do |team|
       most_won_against_opponent(team_id) == team.team_id
-      
+
     end.team_name
   end
 
@@ -463,10 +459,18 @@ class StatTracker
     acc = team_collection.all.find do |team|
       most_lost_against_opponent(team_id) == team.team_id
     end.team_name
-  end 
+  end
   # End of Dan's code #
 
      #################START of SEASON STATS######################
+
+
+     ## biggest slow down = iteration over same source of data
+     ## Use memoization here as well here, Wont work super well if you have to send an arg to method
+     ## how can you format this data so you dont need to reload it
+
+     ## memoization = create an instance variable in a method set to something
+     ## when called its calling that instance variable
 
   def team_name_based_off_of_team_id(team_id)
     team_collection_to_use.each do |team|
@@ -474,6 +478,22 @@ class StatTracker
     end
   end
 
+  ## argument wont work, so memoization with only season will only return the first one
+  ## think about a hash data type
+
+  ##how many times are you iterating over the same data set and cut down significantly = less run time
+
+  # possible memo... not sure how to remove the argument
+  # def games_by_season_memo
+  #   @games_by_season_memo ||=  game_collection_to_use.select do |game|
+  #      season_id == game.season
+  #    end
+  # end
+  #
+  # def games_by_season(season_id)
+  #   games_by_season_memo[season_id]
+  # end
+  
   def games_by_season(season_id)
    game_collection_to_use.select do |game|
      season_id == game.season
@@ -499,8 +519,8 @@ class StatTracker
     coaches_hash.transform_values do |game_team_collection|
       game_team_collection.keep_if do |game_team|
         game_team.result == "WIN"
-      end 
-    end 
+      end
+    end
     coaches_hash.transform_values! do |game_team_collection|
       game_team_collection.count
     end
@@ -509,7 +529,7 @@ class StatTracker
     end
     best_coach[0]
   end
-  
+
    def worst_coach(season_id)
     coaches_hash = game_teams_by_season(season_id).group_by do |game_team|
       game_team.head_coach
@@ -598,5 +618,73 @@ class StatTracker
   end
 
   ######################END of SEASON STATS####################
-  
+  # start of sienna's league stats
+  def home_game_teams
+    game_team_collection.all.find_all do |game_team|
+      game_team.hoa == "home"
+    end
+  end
+
+  def home_game_teams_by_team
+    home_game_teams.group_by do |game_team|
+      game_team.team_id
+    end
+  end
+
+  def total_home_goals_grouped_by_team
+    goals_by_team_id = Hash.new(0)
+    home_game_teams_by_team.each do |team_id, game_team_coll|
+      game_team_coll.each do |game_team|
+        goals_by_team_id[team_id] += game_team.goals.to_i
+      end
+    end
+    goals_by_team_id
+  end
+
+  def total_home_games_grouped_by_team
+    games_by_team_id = Hash.new(0)
+    home_game_teams_by_team.each do |team_id, game_team_coll|
+      game_team_coll.each do |game_team|
+        games_by_team_id[team_id] += 1
+      end
+    end
+    games_by_team_id
+  end
+
+  def ratio_home_goals_to_games_grouped_by_team
+    ratio_goals_to_games_by_team = Hash.new(0)
+    total_home_games_grouped_by_team.each do |games_team_id, total_games|
+      total_home_goals_grouped_by_team.each do |goals_team_id, total_goals|
+        if games_team_id == goals_team_id
+          ratio_goals_to_games_by_team[games_team_id] = (total_goals.to_f / total_games.to_f)
+        end
+      end
+    end
+    ratio_goals_to_games_by_team
+  end
+
+  def find_team_id_with_best_home_goals_to_games_ratio
+    ratio_home_goals_to_games_grouped_by_team.max_by do |team_id, ratio_g_to_g|
+      ratio_g_to_g
+    end[0]
+  end
+
+  def find_team_id_with_worst_home_goals_to_games_ratio
+    ratio_home_goals_to_games_grouped_by_team.min_by do |team_id, ratio_g_to_g|
+      ratio_g_to_g
+    end[0]
+  end
+
+  def highest_scoring_home_team
+    team_name_based_off_of_team_id(find_team_id_with_best_home_goals_to_games_ratio)
+  end
+
+  def lowest_scoring_home_team
+    team_name_based_off_of_team_id(find_team_id_with_worst_home_goals_to_games_ratio)
+  end
+
+  # end of sienna's league stats
+
+  #stop working on stats that arent working
+
 end
