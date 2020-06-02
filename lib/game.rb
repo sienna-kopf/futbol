@@ -26,6 +26,8 @@ class Game
   end
 
   # The below is Dan's code (also including @outcome in initialize)
+  ## megan likes these methods
+  ## divy up functionality into other files outside of stat_tracker
 
   def outcome
     if @home_goals > @away_goals

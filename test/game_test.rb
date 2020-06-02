@@ -38,6 +38,7 @@ class GameTest < Minitest::Test
 
   # The below is Dan's code
 
+
   def test_it_can_get_outcome
     assert_equal :home_win, @game_1.outcome
   end
