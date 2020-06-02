@@ -483,8 +483,19 @@ class StatTracker
 
   ##how many times are you iterating over the same data set and cut down significantly = less run time
 
+  # possible memo... not sure how to remove the argument
+  # def games_by_season_memo
+  #   @games_by_season_memo ||=  game_collection_to_use.select do |game|
+  #      season_id == game.season
+  #    end
+  # end
+  #
+  # def games_by_season(season_id)
+  #   games_by_season_memo[season_id]
+  # end
+
   def games_by_season(season_id)
-   @games_by_season_memo ||= game_collection_to_use.select do |game|
+   game_collection_to_use.select do |game|
      season_id == game.season
    end
   end
