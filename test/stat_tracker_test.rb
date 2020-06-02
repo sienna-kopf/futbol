@@ -47,7 +47,7 @@ class StatTrackerTest < Minitest::Test
     assert_instance_of GameTeamCollection, @stat_tracker.game_team_collection
   end
 
-  # JUDITH START HERE 
+  # JUDITH START HERE
   def test_it_can_get_highest_total_score
     assert_equal 11, @stat_tracker.highest_total_score
   end
@@ -262,7 +262,7 @@ class StatTrackerTest < Minitest::Test
     assert_equal 6, @stat_tracker.game_teams_by_season("20132014").count
     assert_equal GameTeam, @stat_tracker.game_teams_by_season("20162017")[0].class
   end
-  
+
   def test_it_can_determine_the_winningest_coach
     expected1 = ["Darryl Sutter", "Ralph Krueger"]
     assert_includes expected1, @stat_tracker.winningest_coach("20122013")
@@ -342,4 +342,17 @@ class StatTrackerTest < Minitest::Test
     assert_equal Array, @stat_tracker.game_team_collection_to_use.class
   end
   ########################## END SEASON STATISTICS #############################
-end 
+
+  def test_it_can_get_all_teams_grouped_by_away_games
+    assert_equal Hash, @stat_tracker.all_teams_grouped_by_away_games.class
+  end
+
+  def test_it_can_get_highest_scoring_away_team_id
+    assert_equal Hash, @stat_tracker.highest_scoring_away_team_id.class
+  end
+
+  def test_it_can_get_highest_scoring_visitor
+    assert_equal "Houston Dynamo", @stat_tracker.highest_scoring_visitor
+  end
+
+end
