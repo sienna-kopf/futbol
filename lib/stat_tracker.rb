@@ -662,4 +662,6 @@ class StatTracker
   def lowest_scoring_home_team
     team_name_based_off_of_team_id(find_team_id_with_worst_home_goals_to_games_ratio)
   end
+
+  # end of sienna's league stats
 end
