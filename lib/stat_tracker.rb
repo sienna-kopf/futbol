@@ -493,7 +493,7 @@ class StatTracker
   # def games_by_season(season_id)
   #   games_by_season_memo[season_id]
   # end
-
+  
   def games_by_season(season_id)
    game_collection_to_use.select do |game|
      season_id == game.season
