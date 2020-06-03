@@ -70,11 +70,24 @@ class SeasonStatisticsTest < Minitest::Test
   end
 
   def test_it_can_determine_the_winningest_coach
+    skip
     expected1 = ["Darryl Sutter", "Ralph Krueger"]
     assert_includes expected1, @season_statistics.winningest_coach("20122013")
     expected2 = ["Ken Hitchcock", "Alain Vigneault"]
     assert_includes expected2, @season_statistics.winningest_coach("20142015")
     assert_equal "Mike Yeo", @season_statistics.winningest_coach("20162017")
+  end
+
+  def test_ot_can_group_game_teams_by_head_coach
+    expected_coaches = ["Ken Hitchcock", "Darryl Sutter", "Ralph Krueger", "Mike Yeo"]
+    assert_equal expected_coaches, @season_statistics.group_season_game_teams_by_coach("20122013").keys
+    assert_equal GameTeam, @season_statistics.group_season_game_teams_by_coach("20122013").values[0][0].class
+    assert_equal "Ken Hitchcock", @season_statistics.group_season_game_teams_by_coach("20122013").values[0][0].head_coach
+  end
+
+  def test_it_can_filter_game_teams_by_coach_to_just_be_wins
+    assert_equal [], @season_statistics.filter_coaches_game_teams_for_season_to_wins("20122013")["Ken Hitchcock"]
+    assert_equal "WIN", @season_statistics.filter_coaches_game_teams_for_season_to_wins("20122013")["Darryl Sutter"][0].result 
   end
 
   def test_it_can_determine_the_worst_coach
