@@ -6,6 +6,7 @@ require './lib/team_collection'
 require './lib/team'
 require './lib/game_team_collection'
 require './lib/game_team'
+require './lib/season_statistics'
 
 class StatTrackerTest < Minitest::Test
   def setup ## instantiate using the from_csv
@@ -23,6 +24,7 @@ class StatTrackerTest < Minitest::Test
     }
 
     @stat_tracker = StatTracker.from_csv(@locations)
+    @season_statistics = SeasonStatistics.from_csv(@locations)
   end
 
   def test_it_exists
