@@ -4,8 +4,10 @@ require_relative './team_collection'
 require_relative './team'
 require_relative './game_team_collection'
 require_relative './game_team'
+require_relative '../modules/collectionable'
 
 class StatTracker
+  include Collectionable
   attr_reader :games,
               :teams,
               :game_teams
@@ -18,18 +20,6 @@ class StatTracker
 
   def self.from_csv(data_files)
     StatTracker.new(data_files)
-  end
-
-  def game_collection
-    GameCollection.new(@games)
-  end
-
-  def team_collection
-    TeamCollection.new(@teams)
-  end
-
-  def game_team_collection
-    GameTeamCollection.new(@game_teams)
   end
 
   def game_collection_to_use
@@ -493,7 +483,7 @@ class StatTracker
   # def games_by_season(season_id)
   #   games_by_season_memo[season_id]
   # end
-  
+
   def games_by_season(season_id)
    game_collection_to_use.select do |game|
      season_id == game.season
