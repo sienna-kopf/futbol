@@ -68,14 +68,14 @@ class SeasonStatistics
     end
   end
 
-  def winningest_coach(season_id)
-    coaches_hash.transform_values! do |game_team_collection|
-      game_team_collection.count
-    end
-    best_coach = coaches_hash.max_by do |coach, wins|
+  def determine_coach_with_most_wins(season_id)
+    count_season_wins_grouped_by_coach(season_id).max_by do |coach, wins|
       wins
-    end
-    best_coach[0]
+    end[0]
+  end
+
+  def winningest_coach(season_id)
+    determine_coach_with_most_wins(season_id)
   end
 
    def worst_coach(season_id)
