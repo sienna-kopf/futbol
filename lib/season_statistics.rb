@@ -62,12 +62,13 @@ class SeasonStatistics
     end
   end
 
-  def winningest_coach(season_id)
-    coaches_hash.transform_values do |game_team_collection|
-      game_team_collection.keep_if do |game_team|
-        game_team.result == "WIN"
-      end
+  def count_season_wins_grouped_by_coach(season_id)
+    filter_coaches_game_teams_for_season_to_wins(season_id).transform_values! do |game_team_collection|
+      game_team_collection.count
     end
+  end
+
+  def winningest_coach(season_id)
     coaches_hash.transform_values! do |game_team_collection|
       game_team_collection.count
     end
