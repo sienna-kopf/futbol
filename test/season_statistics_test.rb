@@ -95,6 +95,12 @@ class SeasonStatisticsTest < Minitest::Test
     assert_equal 0, @season_statistics.count_season_wins_grouped_by_coach("20122013")["Mike Yeo"]
   end
 
+  def test_it_can_determine_the_coach_with_the_most_wins
+    assert_equal "Mike Yeo", @season_statistics.determine_coach_with_most_wins("20132014")
+    expected = ["Darryl Sutter", "Ralph Krueger"]
+    assert_includes expected, @season_statistics.determine_coach_with_most_wins("20122013")
+  end
+
   def test_it_can_determine_the_worst_coach
     expected = ["Patrick Roy", "Bruce Boudreau", "Ken Hitchcock"]
     assert_includes expected, @season_statistics.worst_coach("20122013")
