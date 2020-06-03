@@ -4,6 +4,7 @@ require_relative './team_collection'
 require_relative './team'
 require_relative './game_team_collection'
 require_relative './game_team'
+require_relative './season_statistics'
 require_relative '../modules/collectionable'
 require_relative '../modules/memoizable'
 
@@ -18,7 +19,9 @@ class StatTracker
     @games = data_files[:games]
     @teams = data_files[:teams]
     @game_teams = data_files[:game_teams]
+    @season_stats = SeasonStatistics.from_csv(data_files)
   end
+
 
   def self.from_csv(data_files)
     StatTracker.new(data_files)
@@ -428,39 +431,12 @@ class StatTracker
       most_lost_against_opponent(team_id) == team.team_id
     end.team_name
   end
-  # End of Dan's code #
-
-     #################START of SEASON STATS######################
-
-
-     ## biggest slow down = iteration over same source of data
-     ## Use memoization here as well here, Wont work super well if you have to send an arg to method
-     ## how can you format this data so you dont need to reload it
-
-     ## memoization = create an instance variable in a method set to something
-     ## when called its calling that instance variable
 
   def team_name_based_off_of_team_id(team_id)
     team_collection_to_use.each do |team|
       return team.team_name if team_id == team.team_id
     end
   end
-
-  ## argument wont work, so memoization with only season will only return the first one
-  ## think about a hash data type
-
-  ##how many times are you iterating over the same data set and cut down significantly = less run time
-
-  # possible memo... not sure how to remove the argument
-  # def games_by_season_memo
-  #   @games_by_season_memo ||=  game_collection_to_use.select do |game|
-  #      season_id == game.season
-  #    end
-  # end
-  #
-  # def games_by_season(season_id)
-  #   games_by_season_memo[season_id]
-  # end
 
   def games_by_season(season_id)
    game_collection_to_use.select do |game|
@@ -481,40 +457,48 @@ class StatTracker
   end
 
   def winningest_coach(season_id)
-    coaches_hash = game_teams_by_season(season_id).group_by do |game_team|
-      game_team.head_coach
-    end
-    coaches_hash.transform_values do |game_team_collection|
-      game_team_collection.keep_if do |game_team|
-        game_team.result == "WIN"
-      end
-    end
-    coaches_hash.transform_values! do |game_team_collection|
-      game_team_collection.count
-    end
-    best_coach = coaches_hash.max_by do |coach, wins|
-      wins
-    end
-    best_coach[0]
+    @season_stats.determine_coach_with_most_wins(season_id)
   end
 
-   def worst_coach(season_id)
-    coaches_hash = game_teams_by_season(season_id).group_by do |game_team|
-      game_team.head_coach
-    end
-    coaches_hash.transform_values do |game_team_collection|
-      game_team_collection.keep_if do |game_team|
-        game_team.result == "WIN"
-      end
-    end
-    coaches_hash.transform_values! do |game_team_collection|
-      game_team_collection.count
-    end
-    worst_coach = coaches_hash.min_by do |coach, wins|
-      wins
-    end
-    worst_coach[0]
+  def worst_coach(season_id)
+    @season_stats.determine_coach_with_fewest_wins(season_id)
   end
+
+  # def winningest_coach(season_id)
+  #   coaches_hash = game_teams_by_season(season_id).group_by do |game_team|
+  #     game_team.head_coach
+  #   end
+  #   coaches_hash.transform_values do |game_team_collection|
+  #     game_team_collection.keep_if do |game_team|
+  #       game_team.result == "WIN"
+  #     end
+  #   end
+  #   coaches_hash.transform_values! do |game_team_collection|
+  #     game_team_collection.count
+  #   end
+  #   best_coach = coaches_hash.max_by do |coach, wins|
+  #     wins
+  #   end
+  #   best_coach[0]
+  # end
+  #
+  #  def worst_coach(season_id)
+  #   coaches_hash = game_teams_by_season(season_id).group_by do |game_team|
+  #     game_team.head_coach
+  #   end
+  #   coaches_hash.transform_values do |game_team_collection|
+  #     game_team_collection.keep_if do |game_team|
+  #       game_team.result == "WIN"
+  #     end
+  #   end
+  #   coaches_hash.transform_values! do |game_team_collection|
+  #     game_team_collection.count
+  #   end
+  #   worst_coach = coaches_hash.min_by do |coach, wins|
+  #     wins
+  #   end
+  #   worst_coach[0]
+  # end
 
   def most_accurate_team(season_id)
     goals_for_season_by_team = Hash.new(0)
