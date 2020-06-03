@@ -48,10 +48,21 @@ class SeasonStatistics
    end
   end
 
-  def winningest_coach(season_id)
-    coaches_hash = game_teams_by_season(season_id).group_by do |game_team|
+  def group_season_game_teams_by_coach(season_id)
+    game_teams_by_season(season_id).group_by do |game_team|
       game_team.head_coach
     end
+  end
+
+  def filter_coaches_game_teams_for_season_to_wins(season_id)
+    group_season_game_teams_by_coach(season_id).transform_values do |game_team_collection|
+      game_team_collection.keep_if do |game_team|
+        game_team.result == "WIN"
+      end
+    end
+  end
+
+  def winningest_coach(season_id)
     coaches_hash.transform_values do |game_team_collection|
       game_team_collection.keep_if do |game_team|
         game_team.result == "WIN"
