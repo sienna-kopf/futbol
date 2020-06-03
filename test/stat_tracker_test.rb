@@ -24,7 +24,6 @@ class StatTrackerTest < Minitest::Test
     }
 
     @stat_tracker = StatTracker.from_csv(@locations)
-    @season_statistics = SeasonStatistics.from_csv(@locations)
   end
 
   def test_it_exists
@@ -275,27 +274,6 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Mike Yeo", @stat_tracker.worst_coach("20142015")
     assert_equal "Peter Laviolette", @stat_tracker.worst_coach("20162017")
   end
-
-  # def test_it_can_count_up_goals_for_teams_over_a_season
-  #   skip
-  #   assert_equal 4, @stat_tracker.total_season_goals_grouped_by_team("20122013")["22"]
-  #   assert_equal ["19", "26", "22", "30"], @stat_tracker.total_season_goals_grouped_by_team("20122013").keys
-  #   assert_equal [0,1,4,1], @stat_tracker.total_season_goals_grouped_by_team("20122013").values
-  # end
-  #
-  # def test_it_can_count_up_shots_for_teams_over_a_season
-  #   skip
-  #   assert_equal 9, @stat_tracker.total_season_shots_grouped_by_team("20122013")["30"]
-  #   assert_equal ["19", "26", "22", "30"], @stat_tracker.total_season_shots_grouped_by_team("20122013").keys
-  #   assert_equal [7,5,4,9], @stat_tracker.total_season_shots_grouped_by_team("20122013").values
-  # end
-  #
-  # def test_it_can_get_the_ratio_of_shots_to_goals_for_the_season
-  #   skip
-  #   assert_equal 0.2, @stat_tracker.season_ratio_goals_to_shots_grouped_by_team("20122013")["26"]
-  #   assert_equal 1.0, @stat_tracker.season_ratio_goals_to_shots_grouped_by_team("20122013")["22"]
-  #   assert_equal ["19", "26", "22", "30"], @stat_tracker.season_ratio_goals_to_shots_grouped_by_team("20122013").keys
-  # end
 
   def test_it_can_determine_the_most_accurate_team
     assert_equal "Washington Spirit FC", @stat_tracker.most_accurate_team("20122013")
