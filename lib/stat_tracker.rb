@@ -41,7 +41,7 @@ class StatTracker
 
   def home_games
     home_games = []
-    game_team_collection.all.flat_map do |game_team|
+    game_team_collection_to_use.flat_map do |game_team|
       result = game_team.hoa == "home"
         home_games << result
       end
@@ -50,7 +50,7 @@ class StatTracker
 
   def percentage_home_wins
     home_wins = []
-    game_team_collection.all.flat_map do |game_team|
+    game_team_collection_to_use.flat_map do |game_team|
       result = game_team.hoa == "home" && game_team.result == "WIN"
         home_wins << result
     end
@@ -59,7 +59,7 @@ class StatTracker
 
   def visitor_games
     visitor_games = []
-    game_team_collection.all.flat_map do |game_team|
+    game_team_collection_to_use.flat_map do |game_team|
       result = game_team.hoa == "away"
       visitor_games << result
     end
@@ -68,7 +68,7 @@ class StatTracker
 
   def percentage_visitor_wins
     visitor_wins = []
-    game_team_collection.all.flat_map do |game_team|
+    game_team_collection_to_use.flat_map do |game_team|
       result = game_team.hoa == "away" && game_team.result == "WIN"
         visitor_wins << result
     end
@@ -77,7 +77,7 @@ class StatTracker
 
   def all_games
     all_games = []
-    game_team_collection.all.flat_map do |game_team|
+    game_team_collection_to_use.flat_map do |game_team|
       result = game_team.hoa
       all_games << result
     end
@@ -86,7 +86,7 @@ class StatTracker
 
   def percentage_ties
     ties = []
-    game_team_collection.all.flat_map do |game_team|
+    game_team_collection_to_use.flat_map do |game_team|
       result =  game_team.result == "TIE"
         ties << result
     end
@@ -95,7 +95,7 @@ class StatTracker
 
   def seasons
     seasons = []
-    game_collection.all.flat_map do |game|
+    game_collection_to_use.flat_map do |game|
        seasons << game.season
     end
     seasons
@@ -110,7 +110,7 @@ class StatTracker
   end
 
   def sum_of_all_goals
-    game_collection.all.sum do |game|
+    game_collection_to_use.sum do |game|
       game.away_goals.to_i + game.home_goals.to_i
     end
   end
@@ -120,7 +120,7 @@ class StatTracker
   end
 
   def sum_of_goals_per_season(season)
-    individual_season = game_collection.all.find_all do |game|
+    individual_season = game_collection_to_use.find_all do |game|
       game.season == season
     end
      individual_season.sum do |game|
@@ -129,14 +129,14 @@ class StatTracker
   end
 
   def average_goals_per_season(season)
-    individual_season = game_collection.all.find_all do |game|
+    individual_season = game_collection_to_use.find_all do |game|
       game.season == season
     end
     (sum_of_goals_per_season(season) / individual_season.count.to_f).round(2)
   end
 
   def average_goals_by_season
-    avg_goals_by_season = game_collection.all.group_by do |game|
+    avg_goals_by_season = game_collection_to_use.group_by do |game|
       game.season
     end
     avg_goals_by_season.transform_values do |season|
@@ -150,7 +150,7 @@ class StatTracker
 
   def team_info(team_id)
     acc = {}
-    team_collection.all.each do |team|
+    team_collection_to_use.each do |team|
       if team.team_id == team_id
         acc["team_id"] = team.team_id
         acc["franchise_id"] = team.franchise_id
@@ -163,7 +163,7 @@ class StatTracker
   end
 
   def home_games_filtered_by_team(team_id)
-    game_collection.all.find_all do |game|
+    game_collection_to_use.find_all do |game|
       game.home_team_id == team_id
     end
   end
@@ -191,7 +191,7 @@ class StatTracker
   end
 
   def away_games_filtered_by_team(team_id)
-    game_collection.all.find_all do |game|
+    game_collection_to_use.find_all do |game|
       game.away_team_id == team_id
     end
   end
@@ -347,7 +347,7 @@ class StatTracker
   end
 
   def all_games_played_by_team(team_id)
-    game_collection.all.find_all do |game|
+    game_collection_to_use.find_all do |game|
       game.home_team_id == team_id || game.away_team_id == team_id
     end
   end
@@ -411,7 +411,7 @@ class StatTracker
   end
 
   def favorite_opponent(team_id)
-    team_collection.all.find do |team|
+    team_collection_to_use.find do |team|
       most_won_against_opponent(team_id) == team.team_id
 
     end.team_name
@@ -424,7 +424,7 @@ class StatTracker
   end
 
   def rival(team_id)
-    acc = team_collection.all.find do |team|
+    acc = team_collection_to_use.find do |team|
       most_lost_against_opponent(team_id) == team.team_id
     end.team_name
   end
@@ -588,7 +588,7 @@ class StatTracker
   ######################END of SEASON STATS####################
   # start of sienna's league stats
   def home_game_teams
-    game_team_collection.all.find_all do |game_team|
+    game_team_collection_to_use.find_all do |game_team|
       game_team.hoa == "home"
     end
   end

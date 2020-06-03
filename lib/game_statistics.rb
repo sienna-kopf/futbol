@@ -1,7 +1,5 @@
 require_relative './game_collection'
 require_relative './game'
-require_relative './team_collection'
-require_relative './team'
 require_relative './game_team_collection'
 require_relative './game_team'
 require_relative '../modules/collectionable'
@@ -42,7 +40,7 @@ class GameStatistics
 
     def home_games
       home_games = []
-      game_team_collection.all.flat_map do |game_team|
+      game_team_collection_to_use.flat_map do |game_team|
         result = game_team.hoa == "home"
           home_games << result
         end
@@ -51,7 +49,7 @@ class GameStatistics
 
     def percentage_home_wins
       home_wins = []
-      game_team_collection.all.flat_map do |game_team|
+      game_team_collection_to_use.flat_map do |game_team|
         result = game_team.hoa == "home" && game_team.result == "WIN"
           home_wins << result
       end
@@ -60,7 +58,7 @@ class GameStatistics
 
     def visitor_games
       visitor_games = []
-      game_team_collection.all.flat_map do |game_team|
+      game_team_collection_to_use.flat_map do |game_team|
         result = game_team.hoa == "away"
         visitor_games << result
       end
@@ -69,7 +67,7 @@ class GameStatistics
 
     def percentage_visitor_wins
       visitor_wins = []
-      game_team_collection.all.flat_map do |game_team|
+      game_team_collection_to_use.flat_map do |game_team|
         result = game_team.hoa == "away" && game_team.result == "WIN"
           visitor_wins << result
       end
@@ -78,7 +76,7 @@ class GameStatistics
 
     def all_games
       all_games = []
-      game_team_collection.all.flat_map do |game_team|
+      game_team_collection_to_use.flat_map do |game_team|
         result = game_team.hoa
         all_games << result
       end
@@ -87,7 +85,7 @@ class GameStatistics
 
     def percentage_ties
       ties = []
-      game_team_collection.all.flat_map do |game_team|
+      game_team_collection_to_use.flat_map do |game_team|
         result =  game_team.result == "TIE"
           ties << result
       end
@@ -96,7 +94,7 @@ class GameStatistics
 
     def seasons
       seasons = []
-      game_collection.all.flat_map do |game|
+      game_collection_to_use.flat_map do |game|
          seasons << game.season
       end
       seasons
@@ -111,7 +109,7 @@ class GameStatistics
     end
 
     def sum_of_all_goals
-      game_collection.all.sum do |game|
+      game_collection_to_use.sum do |game|
         game.away_goals.to_i + game.home_goals.to_i
       end
     end
@@ -121,7 +119,7 @@ class GameStatistics
     end
 
     def sum_of_goals_per_season(season)
-      individual_season = game_collection.all.find_all do |game|
+      individual_season = game_collection_to_use.find_all do |game|
         game.season == season
       end
        individual_season.sum do |game|
@@ -130,19 +128,18 @@ class GameStatistics
     end
 
     def average_goals_per_season(season)
-      individual_season = game_collection.all.find_all do |game|
+      individual_season = game_collection_to_use.find_all do |game|
         game.season == season
       end
       (sum_of_goals_per_season(season) / individual_season.count.to_f).round(2)
     end
 
     def average_goals_by_season
-      avg_goals_by_season = game_collection.all.group_by do |game|
+      avg_goals_by_season = game_collection_to_use.group_by do |game|
         game.season
       end
       avg_goals_by_season.transform_values do |season|
         average_goals_per_season(season[0].season)
       end
     end
-
-    # JUDITH END HERE
+  end
