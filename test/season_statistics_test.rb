@@ -70,7 +70,6 @@ class SeasonStatisticsTest < Minitest::Test
   end
 
   def test_it_can_determine_the_winningest_coach
-    skip
     expected1 = ["Darryl Sutter", "Ralph Krueger"]
     assert_includes expected1, @season_statistics.winningest_coach("20122013")
     expected2 = ["Ken Hitchcock", "Alain Vigneault"]
@@ -99,6 +98,12 @@ class SeasonStatisticsTest < Minitest::Test
     assert_equal "Mike Yeo", @season_statistics.determine_coach_with_most_wins("20132014")
     expected = ["Darryl Sutter", "Ralph Krueger"]
     assert_includes expected, @season_statistics.determine_coach_with_most_wins("20122013")
+  end
+
+  def test_it_can_determine_the_coach_with_the_fewest_wins
+    assert_equal "Patrick Roy", @season_statistics.determine_coach_with_fewest_wins("20132014")
+    expected = ["Ken Hitchcock", "Mike Yeo"]
+    assert_includes expected, @season_statistics.determine_coach_with_fewest_wins("20122013")
   end
 
   def test_it_can_determine_the_worst_coach
