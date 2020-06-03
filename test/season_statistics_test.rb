@@ -69,14 +69,6 @@ class SeasonStatisticsTest < Minitest::Test
     assert_equal GameTeam, @season_statistics.game_teams_by_season("20162017")[0].class
   end
 
-  def test_it_can_determine_the_winningest_coach
-    expected1 = ["Darryl Sutter", "Ralph Krueger"]
-    assert_includes expected1, @season_statistics.winningest_coach("20122013")
-    expected2 = ["Ken Hitchcock", "Alain Vigneault"]
-    assert_includes expected2, @season_statistics.winningest_coach("20142015")
-    assert_equal "Mike Yeo", @season_statistics.winningest_coach("20162017")
-  end
-
   def test_ot_can_group_game_teams_by_head_coach
     expected_coaches = ["Ken Hitchcock", "Darryl Sutter", "Ralph Krueger", "Mike Yeo"]
     assert_equal expected_coaches, @season_statistics.group_season_game_teams_by_coach("20122013").keys
@@ -105,34 +97,6 @@ class SeasonStatisticsTest < Minitest::Test
     expected = ["Ken Hitchcock", "Mike Yeo"]
     assert_includes expected, @season_statistics.determine_coach_with_fewest_wins("20122013")
   end
-
-  def test_it_can_determine_the_worst_coach
-    expected = ["Patrick Roy", "Bruce Boudreau", "Ken Hitchcock"]
-    assert_includes expected, @season_statistics.worst_coach("20122013")
-    assert_equal "Mike Yeo", @season_statistics.worst_coach("20142015")
-    assert_equal "Peter Laviolette", @season_statistics.worst_coach("20162017")
-  end
-
-  # def test_it_can_count_up_goals_for_teams_over_a_season
-  #   skip
-  #   assert_equal 4, @season_statistics.total_season_goals_grouped_by_team("20122013")["22"]
-  #   assert_equal ["19", "26", "22", "30"], @season_statistics.total_season_goals_grouped_by_team("20122013").keys
-  #   assert_equal [0,1,4,1], @season_statistics.total_season_goals_grouped_by_team("20122013").values
-  # end
-  #
-  # def test_it_can_count_up_shots_for_teams_over_a_season
-  #   skip
-  #   assert_equal 9, @season_statistics.total_season_shots_grouped_by_team("20122013")["30"]
-  #   assert_equal ["19", "26", "22", "30"], @season_statistics.total_season_shots_grouped_by_team("20122013").keys
-  #   assert_equal [7,5,4,9], @season_statistics.total_season_shots_grouped_by_team("20122013").values
-  # end
-  #
-  # def test_it_can_get_the_ratio_of_shots_to_goals_for_the_season
-  #   skip
-  #   assert_equal 0.2, @season_statistics.season_ratio_goals_to_shots_grouped_by_team("20122013")["26"]
-  #   assert_equal 1.0, @season_statistics.season_ratio_goals_to_shots_grouped_by_team("20122013")["22"]
-  #   assert_equal ["19", "26", "22", "30"], @season_statistics.season_ratio_goals_to_shots_grouped_by_team("20122013").keys
-  # end
 
   def test_it_can_determine_the_most_accurate_team
     assert_equal "Washington Spirit FC", @season_statistics.most_accurate_team("20122013")
