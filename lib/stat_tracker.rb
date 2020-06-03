@@ -5,9 +5,11 @@ require_relative './team'
 require_relative './game_team_collection'
 require_relative './game_team'
 require_relative '../modules/collectionable'
+require_relative '../modules/memoizable'
 
 class StatTracker
   include Collectionable
+  include Memoizable
   attr_reader :games,
               :teams,
               :game_teams
@@ -20,30 +22,6 @@ class StatTracker
 
   def self.from_csv(data_files)
     StatTracker.new(data_files)
-  end
-
-  def game_collection_to_use
-    instantiate_game_collection
-  end
-
-  def instantiate_game_collection
-    @instantiate_game_collection ||= game_collection.all
-  end
-
-  def game_team_collection_to_use
-    instantiate_game_team_collection
-  end
-
-  def instantiate_game_team_collection
-    @instantiate_game_team_collection ||= game_team_collection.all
-  end
-
-  def team_collection_to_use
-    instantiate_team_collection
-  end
-
-  def instantiate_team_collection
-    @instantiate_team_collection ||= team_collection.all
   end
 
 # JUDITH START HERE
@@ -674,7 +652,4 @@ class StatTracker
   end
 
   # end of sienna's league stats
-
-  #stop working on stats that arent working
-
 end
