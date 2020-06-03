@@ -87,7 +87,12 @@ class SeasonStatisticsTest < Minitest::Test
 
   def test_it_can_filter_game_teams_by_coach_to_just_be_wins
     assert_equal [], @season_statistics.filter_coaches_game_teams_for_season_to_wins("20122013")["Ken Hitchcock"]
-    assert_equal "WIN", @season_statistics.filter_coaches_game_teams_for_season_to_wins("20122013")["Darryl Sutter"][0].result 
+    assert_equal "WIN", @season_statistics.filter_coaches_game_teams_for_season_to_wins("20122013")["Darryl Sutter"][0].result
+  end
+
+  def test_count_season_wins_grouped_by_coach
+    assert_equal 1, @season_statistics.count_season_wins_grouped_by_coach("20122013")["Ralph Krueger"]
+    assert_equal 0, @season_statistics.count_season_wins_grouped_by_coach("20122013")["Mike Yeo"]
   end
 
   def test_it_can_determine_the_worst_coach
