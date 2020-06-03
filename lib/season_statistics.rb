@@ -80,14 +80,6 @@ class SeasonStatistics
     end[0]
   end
 
-  def winningest_coach(season_id)
-    determine_coach_with_most_wins(season_id)
-  end
-
-  def worst_coach(season_id)
-    determine_coach_with_fewest_wins(season_id)
-  end
-
   def most_accurate_team(season_id)
     goals_for_season_by_team = Hash.new(0)
     game_teams_by_season(season_id).each do |game_team|
