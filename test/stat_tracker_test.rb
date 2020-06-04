@@ -48,7 +48,6 @@ class StatTrackerTest < Minitest::Test
     assert_instance_of GameTeamCollection, @stat_tracker.game_team_collection
   end
 
-  # JUDITH START HERE
   def test_it_can_get_highest_total_score
     assert_equal 8, @stat_tracker.highest_total_score
   end
@@ -100,9 +99,6 @@ class StatTrackerTest < Minitest::Test
                 }
     assert_equal expected, @stat_tracker.average_goals_by_season
   end
-  # JUDITH END HERE
-
-  # The below is Dan's code
 
   def test_it_can_get_team_info
     expected = {
@@ -236,9 +232,6 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Montreal Impact", @stat_tracker.rival("19")
   end
 
-# The above is Dan's code
-#################### START SEASON STATISTIC TESTS #########################
-
   def test_it_can_select_games_based_on_season
     assert_equal 3, @stat_tracker.games_by_season("20162017").count
     assert_equal 4, @stat_tracker.games_by_season("20122013").count
@@ -317,8 +310,7 @@ class StatTrackerTest < Minitest::Test
     assert_equal Array, @stat_tracker.team_collection_to_use.class
     assert_equal Array, @stat_tracker.game_team_collection_to_use.class
   end
-  ########################## END SEASON STATISTICS #############################
-  # start of sienna's league stats
+
   def test_it_can_find_all_home_game_teams
     assert_equal 9, @stat_tracker.home_game_teams.count
     assert_equal GameTeam, @stat_tracker.home_game_teams[0].class
@@ -365,5 +357,4 @@ class StatTrackerTest < Minitest::Test
   def test_lowest_scoring_home_team
     assert_equal "FC Cincinnati", @stat_tracker.lowest_scoring_home_team
   end
-  #end of sienna's league stats
 end
