@@ -149,8 +149,6 @@ class SeasonStatistics
     team_name_based_off_of_team_id(worst_team[0])
   end
 
-  ######################END of SEASON STATS####################
-  # start of sienna's league stats
   def home_game_teams
     game_team_collection_to_use.find_all do |game_team|
       game_team.hoa == "home"
@@ -215,33 +213,4 @@ class SeasonStatistics
     team_name_based_off_of_team_id(find_team_id_with_worst_home_goals_to_games_ratio)
   end
 
-  # end of sienna's league STATS
-
-  #################START of SEASON STATS######################
-
-
-  ## biggest slow down = iteration over same source of data
-  ## Use memoization here as well here, Wont work super well if you have to send an arg to method
-  ## how can you format this data so you dont need to reload it
-
-  ## memoization = create an instance variable in a method set to something
-  ## when called its calling that instance variable
-
-
-
-## argument wont work, so memoization with only season will only return the first one
-## think about a hash data type
-
-##how many times are you iterating over the same data set and cut down significantly = less run time
-
-# possible memo... not sure how to remove the argument
-# def games_by_season_memo
-#   @games_by_season_memo ||=  game_collection_to_use.select do |game|
-#      season_id == game.season
-#    end
-# end
-#
-# def games_by_season(season_id)
-#   games_by_season_memo[season_id]
-# end
 end
