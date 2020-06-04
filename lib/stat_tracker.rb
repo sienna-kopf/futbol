@@ -464,42 +464,6 @@ class StatTracker
     @season_stats.determine_coach_with_fewest_wins(season_id)
   end
 
-  # def winningest_coach(season_id)
-  #   coaches_hash = game_teams_by_season(season_id).group_by do |game_team|
-  #     game_team.head_coach
-  #   end
-  #   coaches_hash.transform_values do |game_team_collection|
-  #     game_team_collection.keep_if do |game_team|
-  #       game_team.result == "WIN"
-  #     end
-  #   end
-  #   coaches_hash.transform_values! do |game_team_collection|
-  #     game_team_collection.count
-  #   end
-  #   best_coach = coaches_hash.max_by do |coach, wins|
-  #     wins
-  #   end
-  #   best_coach[0]
-  # end
-  #
-  #  def worst_coach(season_id)
-  #   coaches_hash = game_teams_by_season(season_id).group_by do |game_team|
-  #     game_team.head_coach
-  #   end
-  #   coaches_hash.transform_values do |game_team_collection|
-  #     game_team_collection.keep_if do |game_team|
-  #       game_team.result == "WIN"
-  #     end
-  #   end
-  #   coaches_hash.transform_values! do |game_team_collection|
-  #     game_team_collection.count
-  #   end
-  #   worst_coach = coaches_hash.min_by do |coach, wins|
-  #     wins
-  #   end
-  #   worst_coach[0]
-  # end
-
   def most_accurate_team(season_id)
     goals_for_season_by_team = Hash.new(0)
     game_teams_by_season(season_id).each do |game_team|
