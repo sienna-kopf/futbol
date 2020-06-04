@@ -27,7 +27,6 @@ class StatTracker
     StatTracker.new(data_files)
   end
 
-# JUDITH START HERE
   def highest_total_score
     total = game_collection_to_use.max_by do |game|
       game.away_goals.to_i + game.home_goals.to_i
@@ -146,10 +145,6 @@ class StatTracker
       average_goals_per_season(season[0].season)
     end
   end
-
-  # JUDITH END HERE
-
-  # The below is all of Dan's code
 
   def team_info(team_id)
     acc = {}
@@ -533,8 +528,6 @@ class StatTracker
     team_name_based_off_of_team_id(worst_team[0])
   end
 
-  ######################END of SEASON STATS####################
-  # start of sienna's league stats
   def home_game_teams
     game_team_collection_to_use.find_all do |game_team|
       game_team.hoa == "home"
@@ -599,5 +592,4 @@ class StatTracker
     team_name_based_off_of_team_id(find_team_id_with_worst_home_goals_to_games_ratio)
   end
 
-  # end of sienna's league stats
 end
