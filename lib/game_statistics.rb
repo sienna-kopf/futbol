@@ -132,6 +132,7 @@ class GameStatistics
         game.season == season
       end
       (sum_of_goals_per_season(season) / individual_season.count.to_f).round(2)
+      ## MATHABLE module for average calculation
     end
 
     def average_goals_by_season

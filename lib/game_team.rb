@@ -31,5 +31,6 @@ class GameTeam ### clean out data that is not necessary to store
     @face_off_win_percentage = game_teams_data[:face_off_win_percentage]
     @giveaways = game_teams_data[:giveaways]
     @takeaways = game_teams_data[:takeaways]
+    ## not loading unecessary data might be a good idea!
   end
 end

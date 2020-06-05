@@ -13,4 +13,5 @@ class Team
     @link = team_data[:link]
   end
 
+  #team details methods 
 end
